@@ -1,0 +1,40 @@
+name: flutter_test_0924
+description: A new Flutter project.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.3
+
+  # 追加パッケージ
+  flutter_riverpod: ^0.13.1+1
+  flutter_hooks: ^0.18.0
+  hooks_riverpod: ^0.13.0-nullsafety.3
+  freezed_annotation: ^0.14.3
+  json_serializable: ^5.0.2
+  state_notifier: ^0.7.1
+
+  # 追加パッケージ(Firebase)
+  firebase_core: ^1.6.0
+  cloud_firestore: ^2.5.3
+  firebase_auth: ^3.1.1
+  google_sign_in: ^5.1.1 
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.4
+
+  # 追加パッケージ
+  build_runner: ^2.1.2
+  freezed: ^0.14.5
+
+flutter:
+  uses-material-design: true
