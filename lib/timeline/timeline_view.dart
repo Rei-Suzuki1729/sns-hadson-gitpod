@@ -7,34 +7,35 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '/abstract/post.dart';
 import '/timeline/timeline_viewmodel.dart';
 
-const url =
-    'http://4.bp.blogspot.com/--BQnc6hxRm4/VEETLVoJiUI/AAAAAAAAoa0/GZZhRIxBwso/s800/sensu_salaryman.png';
-
 class TimeLinePage extends HookWidget {
   const TimeLinePage({Key? key}) : super(key: key);
 
   @override
-
-  // Todo
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Time Line'),
-      //   actions: [_userIcon(), _authButton()],
-      // ),
+      appBar: AppBar(
+        title: const Text('Time Line'),
+        actions: [_userIcon(), _authButton()],
+      ),
       body: _timeLine(context),
-      // floatingActionButton: _postButton(context),
+      floatingActionButton: _postButton(context),
     );
   }
 
   // appBarの要素
   Widget _userIcon() {
     final user = useProvider(authProvider);
-    if (user.state == false) {
-      return const Icon(Icons.account_circle);
-    } else {
-      return _userPhoto(url);
-    }
+    return user.when(
+      data: (user) {
+        if (user == null) {
+          return const Icon(Icons.account_circle);
+        } else {
+          return _userPhoto(user.photoURL!);
+        }
+      },
+      loading: () => const CircularProgressIndicator(),
+      error: (err, stackTrace) => Text(err.toString()),
+    );
   }
 
   Widget _userPhoto(String photoURL) {
@@ -47,48 +48,48 @@ class TimeLinePage extends HookWidget {
 
   Widget _authButton() {
     final user = useProvider(authProvider);
-    if (user.state == false) {
-      return _signInButton(user);
-    } else {
-      return _signOutButton(user);
-    }
+    return user.when(
+      data: (user) {
+        if (user == null) {
+          return _signInButton();
+        } else {
+          return _signOutButton();
+        }
+      },
+      loading: () => const CircularProgressIndicator(),
+      error: (err, stackTrace) => Text(err.toString()),
+    );
   }
 
-  Widget _signInButton(StateController user) {
+  Widget _signInButton() {
     return IconButton(
       onPressed: () {
-        signIn(user);
+        signIn();
       },
       icon: const Icon(Icons.login),
     );
   }
 
-  Widget _signOutButton(StateController user) {
+  Widget _signOutButton() {
     return IconButton(
       onPressed: () {
-        signOut(user);
+        signOut();
       },
       icon: const Icon(Icons.logout),
-    );
-  }
-
-  // floatingActionButtonの要素
-  Widget _postButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        Navigator.of(context).pushNamed('/post');
-      },
-      child: const Icon(Icons.add),
     );
   }
 
   // bodyの要素
   Widget _timeLine(BuildContext context) {
     final posts = useProvider(postsProvider);
-    return _timeLineCards(context, posts.state);
+    return posts.when(
+      data: (posts) => _timeLineCards(context, posts.toList()),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stackTrace) => Text(err.toString()),
+    );
   }
 
-  Widget _timeLineCards(BuildContext context, List posts) {
+  Widget _timeLineCards(BuildContext context, List<Post> posts) {
     return ListView.builder(
       itemCount: posts.length,
       itemBuilder: (context, index) {
@@ -115,5 +116,15 @@ class TimeLinePage extends HookWidget {
     } else {
       return _userPhoto(post.photoURL);
     }
+  }
+
+  // floatingActionButtonの要素
+  Widget _postButton(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.of(context).pushNamed('/post');
+      },
+      child: const Icon(Icons.add),
+    );
   }
 }
