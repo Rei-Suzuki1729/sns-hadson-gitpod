@@ -3,36 +3,46 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // 参照ファイル
 import '/abstract/post.dart';
-import '/model/auth_model.dart';
-import '/model/posts_model.dart';
+import '/timeline/timeline_viewmodel.dart';
 
-final postStateNotifierProvider = StateNotifierProvider<PostStateNotifier>(
-  (ref) => PostStateNotifier(),
-);
+const url =
+    'http://4.bp.blogspot.com/--BQnc6hxRm4/VEETLVoJiUI/AAAAAAAAoa0/GZZhRIxBwso/s800/sensu_salaryman.png';
+
+final postStateNotifierProvider =
+    StateNotifierProvider<PostStateNotifier>((ref) {
+  final user = ref.watch(authProvider);
+  final posts = ref.watch(postsProvider);
+  return PostStateNotifier(user, posts);
+});
 
 class PostStateNotifier extends StateNotifier<Post> {
-  PostStateNotifier() : super(const Post());
+  PostStateNotifier(this.user, this.posts) : super(const Post());
+  final StateController<bool> user;
+  final StateController<List> posts;
 
+  // Todo
   void changeBody(String value) {
-    state = state.copyWith(body: value);
+    // state = state.copyWith(body: value);
   }
 
-  Future addPost() async {
-    final user = getCurrentUser();
-    if (user != null) {
-      state = state.copyWith(
-        user: user.displayName.toString(),
-        uid: user.uid,
-        photoURL: user.photoURL.toString(),
-        timeStamp: DateTime.now(),
-      );
-    } else {
-      state = state.copyWith(
-        user: 'anonymous',
-        uid: 'anonymous',
-        timeStamp: DateTime.now(),
-      );
-    }
-    await addPostDB(state);
+  //Todo
+  void addPost() {
+    // if (user.state == true) {
+    //   state = state.copyWith(
+    //     user: "おじ",
+    //     uid: "oji",
+    //     photoURL: url,
+    //     timeStamp: DateTime.now(),
+    //   );
+    // } else {
+    //   state = state.copyWith(
+    //     user: 'anonymous',
+    //     uid: 'anonymous',
+    //     timeStamp: DateTime.now(),
+    //   );
+    // }
+    // final List<Post>? newPosts = [...posts.state];
+    // newPosts!.add(state);
+    // posts.state = newPosts;
   }
 }

@@ -2,19 +2,42 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // 参照ファイル
-import '/model/auth_model.dart';
-import '/model/posts_model.dart';
+import '/abstract/post.dart';
 
-final authProvider =
-    Provider.autoDispose((ref) => ref.watch(authModelProvider));
+// Todo
+final postsProvider = StateProvider(
+  (ref) => [
+    // Post(
+    //   user: 'anonymous',
+    //   body: 'body1',
+    //   uid: 'anonymous',
+    //   photoURL: '',
+    //   timeStamp: DateTime(2021),
+    // ),
+    // Post(
+    //   user: 'anonymous',
+    //   body: 'body2',
+    //   uid: 'anonymous',
+    //   photoURL: '',
+    //   timeStamp: DateTime(2021),
+    // ),
+    // Post(
+    //   user: 'anonymous',
+    //   body: 'body3',
+    //   uid: 'anonymous',
+    //   photoURL: '',
+    //   timeStamp: DateTime(2021),
+    // ),
+  ],
+);
 
-final postsProvider =
-    Provider.autoDispose((ref) => ref.watch(postsModelProvider));
+final authProvider = StateProvider((ref) => false);
 
-Future signIn() async {
-  signInAuth();
+// Todo
+void signIn(StateController user) {
+  // user.state = true;
 }
 
-Future signOut() async {
-  signOutAuth();
+void signOut(StateController user) {
+  // user.state = false;
 }
