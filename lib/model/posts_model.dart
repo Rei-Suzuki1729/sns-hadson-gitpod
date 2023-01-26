@@ -6,19 +6,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '/abstract/post.dart';
 
 final postsModelProvider = StreamProvider.autoDispose((ref) {
-  // final posts = FirebaseFirestore.instance
-  //     .collection('posts')
-  //     .orderBy('timeStamp')
-  //     .snapshots();
-  //     .map(
-  //       (snapshot) => snapshot.docs.map(
-  //         (doc) => Post.fromJson(doc.data()),
-  //       ),
-  //     );
-  // return posts;
-  return Stream<Iterable<Post>>.value([]);
+  final posts = FirebaseFirestore.instance
+      .collection('posts')
+      .orderBy('timeStamp')
+      .snapshots()
+      .map(
+        (snapshot) => snapshot.docs.map(
+          (doc) => Post.fromJson(doc.data()),
+        ),
+      );
+  return posts;
 });
 
-void addPostDB(Post post) async {
-  // await FirebaseFirestore.instance.collection('posts').add(post.toJson());
+Future addPostDB(Post post) async {
+  await FirebaseFirestore.instance.collection('posts').add(post.toJson());
 }

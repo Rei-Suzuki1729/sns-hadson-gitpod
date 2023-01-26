@@ -11,10 +11,10 @@ final authProvider =
 final postsProvider =
     Provider.autoDispose((ref) => ref.watch(postsModelProvider));
 
-void signIn() {
+Future signIn() async {
   signInAuth();
 }
 
-void signOut() {
+Future signOut() async {
   signOutAuth();
 }
